@@ -198,26 +198,46 @@ export const getSpendingPatterns = (transactions: Transaction[]): SpendingPatter
     return [];
   }
   
-  // Use all provided transactions (already filtered by caller)
-  const categorySpending = transactions.reduce((acc, t) => {
+  // Get current month transactions
+  const now = new Date();
+  const currentMonth = now.getMonth();
+  const currentYear = now.getFullYear();
+  const currentMonthTransactions = transactions.filter(t => {
+    const date = new Date(t.date);
+    return date.getMonth() === currentMonth && date.getFullYear() === currentYear;
+  });
+
+  // Get last month for trend analysis
+  const lastMonth = currentMonth === 0 ? 11 : currentMonth - 1;
+  const lastMonthYear = currentMonth === 0 ? currentYear - 1 : currentYear;
+  const lastMonthTransactions = transactions.filter(t => {
+    const date = new Date(t.date);
+    return date.getMonth() === lastMonth && date.getFullYear() === lastMonthYear;
+  });
+
+  const categorySpending = currentMonthTransactions.reduce((acc, t) => {
+    acc[t.category] = (acc[t.category] || 0) + t.amount;
+    return acc;
+  }, {} as Record<string, number>);
+
+  const lastMonthCategorySpending = lastMonthTransactions.reduce((acc, t) => {
     acc[t.category] = (acc[t.category] || 0) + t.amount;
     return acc;
   }, {} as Record<string, number>);
 
   const totalSpending = Object.values(categorySpending).reduce((sum, amount) => sum + amount, 0);
 
-  // For trend analysis, compare with previous period (simplified)
-  const avgAmount = totalSpending / Object.keys(categorySpending).length;
-
   return Object.entries(categorySpending)
     .map(([category, amount]) => {
+      const lastMonthAmount = lastMonthCategorySpending[category] || 0;
       let trend: 'up' | 'down' | 'stable' = 'stable';
       
-      // Simple trend based on whether spending is above or below average
-      if (amount > avgAmount * 1.2) {
+      if (lastMonthAmount > 0) {
+        const change = ((amount - lastMonthAmount) / lastMonthAmount) * 100;
+        if (change > 10) trend = 'up';
+        else if (change < -10) trend = 'down';
+      } else if (amount > 0) {
         trend = 'up';
-      } else if (amount < avgAmount * 0.8) {
-        trend = 'down';
       }
 
       return {

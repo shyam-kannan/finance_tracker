@@ -16,16 +16,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ transactions, budgets }) =
   const totalBudget = budgets.reduce((sum, b) => sum + b.limit, 0);
   const averageTransaction = transactions.length > 0 ? totalSpent / transactions.length : 0;
   
-  // Get current month transactions for patterns
-  const now = new Date();
-  const currentMonth = now.getMonth();
-  const currentYear = now.getFullYear();
-  const currentMonthTransactions = transactions.filter(t => {
-    const date = new Date(t.date);
-    return date.getMonth() === currentMonth && date.getFullYear() === currentYear;
-  });
-  
-  const spendingPatterns = getSpendingPatterns(currentMonthTransactions);
+  const spendingPatterns = getSpendingPatterns(transactions);
   const topSpendingCategory = spendingPatterns[0];
   
   const overBudgetCategories = budgets.filter(b => b.spent > b.limit);

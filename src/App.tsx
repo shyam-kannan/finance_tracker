@@ -32,16 +32,11 @@ function App() {
     
     setTransactions(prev => [newTransaction, ...prev]);
     
-    // Update budget spending - both category-specific and overall budgets
+    // Update budget spending
     setBudgets(prev => prev.map(budget => 
-      if (budget.isOverall) {
-        // Update overall budget with all transactions
-        return { ...budget, spent: budget.spent + newTransaction.amount };
-      } else if (budget.category === newTransaction.category) {
-        // Update category-specific budget
-        return { ...budget, spent: budget.spent + newTransaction.amount };
-      }
-      return budget;
+      budget.category === newTransaction.category
+        ? { ...budget, spent: budget.spent + newTransaction.amount }
+        : budget
     ));
   };
 
@@ -52,18 +47,14 @@ function App() {
       t.id === updatedTransaction.id ? updatedTransaction : t
     ));
     
-    // Update budget spending for both old and new transactions
+    // Update budget spending
     if (oldTransaction) {
       setBudgets(prev => prev.map(budget => {
-        if (budget.isOverall) {
-          // Update overall budget: subtract old amount, add new amount
-          const newSpent = budget.spent - oldTransaction.amount + updatedTransaction.amount;
+        if (budget.category === oldTransaction.category) {
+          const newSpent = budget.spent - oldTransaction.amount;
           return { ...budget, spent: Math.max(0, newSpent) };
-        } else if (budget.category === oldTransaction.category) {
-          // Remove old transaction from its category budget
-          return { ...budget, spent: Math.max(0, budget.spent - oldTransaction.amount) };
-        } else if (budget.category === updatedTransaction.category) {
-          // Add new transaction to its category budget
+        }
+        if (budget.category === updatedTransaction.category) {
           return { ...budget, spent: budget.spent + updatedTransaction.amount };
         }
         return budget;
@@ -76,16 +67,11 @@ function App() {
     if (transaction) {
       setTransactions(prev => prev.filter(t => t.id !== id));
       
-      // Update budget spending - subtract from both category and overall budgets
+      // Update budget spending
       setBudgets(prev => prev.map(budget => 
-        if (budget.isOverall) {
-          // Subtract from overall budget
-          return { ...budget, spent: Math.max(0, budget.spent - transaction.amount) };
-        } else if (budget.category === transaction.category) {
-          // Subtract from category budget
-          return { ...budget, spent: Math.max(0, budget.spent - transaction.amount) };
-        }
-        return budget;
+        budget.category === transaction.category
+          ? { ...budget, spent: Math.max(0, budget.spent - transaction.amount) }
+          : budget
       ));
     }
   };

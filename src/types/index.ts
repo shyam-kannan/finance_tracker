@@ -23,7 +23,6 @@ export interface Budget {
   limit: number;
   spent: number;
   period: 'monthly' | 'weekly';
-  isOverall?: boolean;
 }
 
 export interface Category {
