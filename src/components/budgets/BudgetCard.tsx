@@ -25,7 +25,9 @@ export const BudgetCard: React.FC<BudgetCardProps> = ({ budget, onEdit }) => {
       <div className="flex items-start justify-between mb-4">
         <div>
           <h3 className="text-lg font-semibold text-gray-900">{budget.category}</h3>
-          <p className="text-sm text-gray-500 capitalize">{budget.period} Budget</p>
+          <p className="text-sm text-gray-500 capitalize">
+            {budget.category === 'Overall Budget' ? 'Total ' : ''}{budget.period} Budget
+          </p>
         </div>
         <div className="p-2 bg-blue-50 rounded-lg">
           <Target className="w-5 h-5 text-blue-600" />

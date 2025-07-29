@@ -71,6 +71,7 @@ export const BudgetForm: React.FC<BudgetFormProps> = ({
             required
           >
             <option value="">Select Category</option>
+            <option value="Overall Budget">Overall Budget (All Categories)</option>
             {categories.map(category => (
               <option key={category.id} value={category.name}>
                 {category.name}
