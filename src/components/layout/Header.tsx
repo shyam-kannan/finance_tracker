@@ -1,15 +1,21 @@
 import React from 'react';
-import { Bell, Search, User } from 'lucide-react';
+import { Search, User } from 'lucide-react';
 import { User as UserType } from '../../types';
 import { useSettings } from '../../hooks/useSettings';
+import { NotificationDropdown } from './NotificationDropdown';
+import { useNotifications } from '../../hooks/useNotifications';
+import { Transaction, Budget } from '../../types';
 
 interface HeaderProps {
   user: UserType;
   title: string;
+  transactions: Transaction[];
+  budgets: Budget[];
 }
 
-export const Header: React.FC<HeaderProps> = ({ user, title }) => {
+export const Header: React.FC<HeaderProps> = ({ user, title, transactions, budgets }) => {
   const { settings } = useSettings();
+  const { notifications, unreadCount, markAsRead, markAllAsRead, clearNotification } = useNotifications(transactions, budgets);
   
   const getCurrencySymbol = () => {
     const symbols = {
@@ -40,12 +46,13 @@ export const Header: React.FC<HeaderProps> = ({ user, title }) => {
             />
           </div>
 
-          <button className="relative p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors">
-            <Bell className="w-6 h-6" />
-            <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
-              3
-            </span>
-          </button>
+          <NotificationDropdown
+            notifications={notifications}
+            unreadCount={unreadCount}
+            onMarkAsRead={markAsRead}
+            onMarkAllAsRead={markAllAsRead}
+            onClearNotification={clearNotification}
+          />
 
           <div className="flex items-center space-x-3">
             {settings.profile.avatar || user.avatar ? (

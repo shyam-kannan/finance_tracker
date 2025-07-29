@@ -165,7 +165,12 @@ function App() {
       />
       
       <div className="flex-1 flex flex-col">
-        <Header user={user} title={getPageTitle()} />
+        <Header 
+          user={user} 
+          title={getPageTitle()} 
+          transactions={transactions}
+          budgets={budgets}
+        />
         
         <main className="flex-1 p-6 overflow-y-auto">
           {renderContent()}

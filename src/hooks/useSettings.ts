@@ -138,6 +138,12 @@ export const useSettings = () => {
     }
   };
 
+  // Apply theme on settings load
+  useEffect(() => {
+    if (!isLoading) {
+      applyTheme(settings.appearance.theme);
+    }
+  }, [settings.appearance.theme, isLoading]);
   const resetSettings = () => {
     setSettings(defaultSettings);
     localStorage.removeItem('finance_settings');
