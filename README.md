@@ -1,6 +1,8 @@
 # 🧾 FinanceTracker – AI-Powered Receipt Intelligence App
 
-Welcome to **FinanceTracker**, a sleek, modern full-stack web app that helps you intelligently track and analyze your expenses using AI. Upload receipts (images only), extract store names and categories with Google's **Gemini LLM**, and get spending insights—all wrapped in a clean, user-friendly dashboard.
+FinanceTracker is an AI-powered personal finance web app that transforms how you manage expenses. Simply upload a receipt image or PDF — and the app will automatically detect whether it's a valid purchase receipt, extract all essential information (vendor, total, date, payment method), categorize your spending, and offer personalized insights using a powerful language model.
+
+Whether you’re trying to stay within your monthly food budget or spot sneaky recurring charges, FinanceTracker delivers an intelligent, automated, and visually intuitive solution for staying in control of your money — all with zero manual data entry.
 
 ---
 
@@ -18,11 +20,11 @@ Welcome to **FinanceTracker**, a sleek, modern full-stack web app that helps you
 
 | Dashboard | Transactions | Upload Receipt |
 |----------|--------------|----------------|
-| ![Dashboard](./public/screenshots/Screenshot%202025-07-29%20150942.png) | ![Transactions](./public/screenshots/Screenshot%202025-07-29%20150950.png) | ![Upload](./public/screenshots/Screenshot%202025-07-29%20151145.png) |
+| ![Dashboard](https://i.imgur.com/naryNNP.png) | ![Transactions](https://i.imgur.com/QDE2yXq.png) | ![Upload](./public/screenshots/Screenshot%202025-07-29%20151145.png) |
 
 | AI Insights | Budgets | Analytics |
 |-------------|---------|-----------|
-| ![AI Insights](./public/screenshots/Screenshot%202025-07-29%20151210.png) | ![Budgets](./public/screenshots/Screenshot%202025-07-29%20151224.png) | ![Analytics](./public/screenshots/Screenshot%202025-07-29%20151158.png) |
+| ![AI Insights](./public/screenshots/Screenshot%202025-07-29%20151210.png) | ![Budgets](https://i.imgur.com/r2XQS3c.png) | ![Analytics](./public/screenshots/Screenshot%202025-07-29%20151158.png) |
 
 | Settings | Appearance |
 |----------|------------|
