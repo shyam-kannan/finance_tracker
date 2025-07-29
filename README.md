@@ -4,17 +4,17 @@ Welcome to **FinanceTracker**, a sleek, modern full-stack web app that helps you
 
 ---
 
-## 🌟 Features
+## Features
 
-- 📸 **Image Upload Only**: Upload receipt screenshots (PNG, JPG, etc.)
-- 🧠 **AI Receipt Intelligence**: Gemini LLM extracts store name + category automatically
-- ⛔️ **Non-Receipt Rejection**: Non-purchase images are auto-rejected with a friendly toast message
-- 📅 **Calendar Reminder Prompt**: Option to set a return reminder if a deadline is detected
-- 📊 **Dynamic Dashboard**: Track transactions, budgets, analytics, and AI-based insights
+- **Image Upload Only**: Upload receipt screenshots (PNG, JPG, etc.)
+- **AI Receipt Intelligence**: Gemini LLM extracts store name + category automatically
+- **Non-Receipt Rejection**: Non-purchase images are auto-rejected with a friendly toast message
+- **Calendar Reminder Prompt**: Option to set a return reminder if a deadline is detected
+- **Dynamic Dashboard**: Track transactions, budgets, analytics, and AI-based insights
 
 ---
 
-## 🖼️ Screenshots
+## 🖼Screenshots
 
 | Dashboard | Transactions | Upload Receipt |
 |----------|--------------|----------------|
@@ -43,3 +43,40 @@ cd finance-tracker
 ```bash
 npm install
 ```
+### 3. Set up your .env file
+Create a .env.local file in the root and include the following:
+
+```bash
+NEXT_PUBLIC_GOOGLE_API_KEY=your_gemini_api_key
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
+
+### 4. Run the development server
+
+```bash
+npm run dev
+```
+Visit http://localhost:3000 to view the app in your browser.
+
+---
+
+## Tech Stack
+
+- **Framework:** Next.js 13 (App Router) + TypeScript
+- **UI:** TailwindCSS + Shadcn + Lucide Icons
+- **Auth:** Supabase Auth
+- **Storage:** Supabase Storage
+- **AI:** Gemini Pro API for smart receipt analysis
+- **OCR:** Tesseract.js for image-to-text extraction
+- **Reminders:** Optional Google Calendar integration via user prompt
+
+---
+
+---
+
+## Author
+
+- **Shyam Kannan — Software Developer**
+
+---
