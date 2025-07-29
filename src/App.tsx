@@ -8,6 +8,7 @@ import { Transactions } from './pages/Transactions';
 import { Budgets } from './pages/Budgets';
 import { Analytics } from './pages/Analytics';
 import { Insights } from './pages/Insights';
+import { Settings } from './pages/Settings';
 import { Transaction, Budget } from './types';
 import { mockTransactions, mockBudgets } from './data/mockData';
 
@@ -132,12 +133,7 @@ function App() {
       case 'insights':
         return <Insights transactions={transactions} />;
       case 'settings':
-        return (
-          <div className="text-center py-12">
-            <h3 className="text-lg font-medium text-gray-900 mb-2">Settings</h3>
-            <p className="text-gray-600">Settings panel coming soon...</p>
-          </div>
-        );
+        return <Settings />;
       default:
         return <Dashboard transactions={transactions} budgets={budgets} />;
     }
