@@ -20,7 +20,6 @@ export const Header: React.FC<HeaderProps> = ({ user, title, transactions, budge
   // Use settings profile info if available, fallback to user
   const displayName = settings.profile.name || user.name;
   const displayEmail = settings.profile.email || user.email;
-  const displayAvatar = settings.profile.avatar || user.avatar;
   
   const getCurrencySymbol = () => {
     const symbols = {

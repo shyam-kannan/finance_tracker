@@ -30,7 +30,6 @@ export const useAuth = () => {
       id: '1',
       email,
       name: nameFromEmail,
-      avatar: `https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&dpr=2`
     };
     setUser(user);
     localStorage.setItem('finance_user', JSON.stringify(user));
@@ -41,7 +40,6 @@ export const useAuth = () => {
         name: nameFromEmail,
         email: email,
         phone: '',
-        avatar: user.avatar
       },
       notifications: {
         budgetAlerts: true,
@@ -78,7 +76,6 @@ export const useAuth = () => {
       id: '1',
       email,
       name,
-      avatar: `https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&dpr=2`
     };
     setUser(user);
     localStorage.setItem('finance_user', JSON.stringify(user));
@@ -89,7 +86,6 @@ export const useAuth = () => {
         name: name,
         email: email,
         phone: '',
-        avatar: user.avatar
       },
       notifications: {
         budgetAlerts: true,

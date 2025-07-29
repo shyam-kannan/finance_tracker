@@ -99,9 +99,11 @@ export const useSettings = () => {
       const updatedUser = {
         ...user,
         name: profile.name || user.name,
-        email: profile.email || user.email,
-        avatar: profile.avatar || user.avatar
+        email: profile.email || user.email
       };
+      if (profile.avatar) {
+        updatedUser.avatar = profile.avatar;
+      }
       localStorage.setItem('finance_user', JSON.stringify(updatedUser));
     }
   };
