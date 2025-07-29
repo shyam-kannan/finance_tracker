@@ -24,11 +24,11 @@ Whether you’re trying to stay within your monthly food budget or spot sneaky r
 
 | AI Insights | Budgets | Analytics |
 |-------------|---------|-----------|
-| ![AI Insights](./public/screenshots/Screenshot%202025-07-29%20151210.png) | ![Budgets](https://i.imgur.com/r2XQS3c.png) | ![Analytics](./public/screenshots/Screenshot%202025-07-29%20151158.png) |
+| ![AI Insights](https://i.imgur.com/Kx2BaTs.png) | ![Budgets](https://i.imgur.com/r2XQS3c.png) | ![Analytics](https://i.imgur.com/vjYXrRv.png) |
 
-| Settings | Appearance |
-|----------|------------|
-| ![Settings](./public/screenshots/Screenshot%202025-07-29%20151210.png) | ![Appearance](./public/screenshots/Screenshot%202025-07-29%20151152.png) |
+| Settings |
+|----------|
+| ![Settings](https://i.imgur.com/p9MJIA7.png) |
 
 ---
 
