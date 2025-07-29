@@ -16,21 +16,44 @@ Whether you’re trying to stay within your monthly food budget or spot sneaky r
 
 ---
 
-## Screenshots
+## 🖼️ Screenshots
 
-| Dashboard | Transactions |
-|----------|--------------|----------------|
-| ![Dashboard](https://i.imgur.com/naryNNP.png) | ![Transactions](https://i.imgur.com/QDE2yXq.png) | 
+<table>
+  <tr>
+    <td><strong>Dashboard</strong></td>
+    <td><strong>Transactions</strong></td>
+  </tr>
+  <tr>
+    <td><img src="https://i.imgur.com/naryNNP.png" width="100%"/></td>
+    <td><img src="https://i.imgur.com/QDE2yXq.png" width="100%"/></td>
+  </tr>
+</table>
 
-| AI Insights | Budgets | Analytics |
-|-------------|---------|-----------|
-| ![AI Insights](https://i.imgur.com/Kx2BaTs.png) | ![Budgets](https://i.imgur.com/r2XQS3c.png) | ![Analytics](https://i.imgur.com/vjYXrRv.png) |
+<br/>
 
-| Settings |
-|----------|
-| ![Settings](https://i.imgur.com/p9MJIA7.png) |
+<table>
+  <tr>
+    <td><strong>AI Insights</strong></td>
+    <td><strong>Budgets</strong></td>
+    <td><strong>Analytics</strong></td>
+  </tr>
+  <tr>
+    <td><img src="https://i.imgur.com/Kx2BaTs.png" width="100%"/></td>
+    <td><img src="https://i.imgur.com/r2XQS3c.png" width="100%"/></td>
+    <td><img src="https://i.imgur.com/vjYXrRv.png" width="100%"/></td>
+  </tr>
+</table>
 
----
+<br/>
+
+<table>
+  <tr>
+    <td><strong>Settings</strong></td>
+  </tr>
+  <tr>
+    <td><img src="https://i.imgur.com/p9MJIA7.png" width="100%"/></td>
+  </tr>
+</table>
 
 ## 🚀 Getting Started
 
