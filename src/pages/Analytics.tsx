@@ -14,6 +14,7 @@ export const Analytics: React.FC<AnalyticsProps> = ({ transactions }) => {
   const [timeFilter, setTimeFilter] = useState('month');
   const [categoryFilter, setCategoryFilter] = useState('all');
 
+  // Get spending patterns based on current transactions
   const spendingPatterns = getSpendingPatterns(transactions);
   
   // Filter transactions based on time period
@@ -38,8 +39,7 @@ export const Analytics: React.FC<AnalyticsProps> = ({ transactions }) => {
   const totalSpent = filteredTransactions.reduce((sum, t) => sum + t.amount, 0);
   const avgTransaction = filteredTransactions.length > 0 ? totalSpent / filteredTransactions.length : 0;
   
-  // Category analysis
-  const categories = [...new Set(transactions.map(t => t.category))];
+  // Category analysis from actual transactions
   const topCategory = spendingPatterns[0];
   
   // Vendor analysis
@@ -75,6 +75,32 @@ export const Analytics: React.FC<AnalyticsProps> = ({ transactions }) => {
   const monthlyChange = lastMonthSpending > 0 
     ? ((currentMonthSpending - lastMonthSpending) / lastMonthSpending) * 100
     : 0;
+
+  // Show message when no transactions exist
+  if (transactions.length === 0) {
+    return (
+      <div className="space-y-6">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900">Analytics</h2>
+            <p className="text-gray-600">Detailed insights into your spending patterns</p>
+          </div>
+        </div>
+        
+        <div className="text-center py-12">
+          <div className="max-w-md mx-auto">
+            <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <span className="text-2xl">📊</span>
+            </div>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">No Data to Analyze</h3>
+            <p className="text-gray-600 mb-6">
+              Upload receipts or add transactions to see detailed analytics and spending insights.
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -123,9 +149,7 @@ export const Analytics: React.FC<AnalyticsProps> = ({ transactions }) => {
             <p className="text-2xl font-bold text-gray-900 mt-1">
               {filteredTransactions.length}
             </p>
-            <p className="text-sm text-gray-500 mt-2">
-              {timeFilter} period
-            </p>
+            <p className="text-sm text-gray-500 mt-2">This {timeFilter}</p>
           </div>
         </Card>
         
@@ -145,10 +169,10 @@ export const Analytics: React.FC<AnalyticsProps> = ({ transactions }) => {
           <div className="text-center">
             <p className="text-sm font-medium text-gray-600">Top Category</p>
             <p className="text-2xl font-bold text-gray-900 mt-1">
-              {topCategory?.category || 'N/A'}
+              {topCategory?.category || 'None'}
             </p>
             <p className="text-sm text-gray-500 mt-2">
-              {topCategory ? `${topCategory.percentage.toFixed(1)}% of spending` : ''}
+              {topCategory ? `${topCategory.percentage.toFixed(1)}% of spending` : 'No data'}
             </p>
           </div>
         </Card>
@@ -167,8 +191,6 @@ export const Analytics: React.FC<AnalyticsProps> = ({ transactions }) => {
           title="Category Analysis" 
         />
       </div>
-
-      {/* Top Vendors */}
       <Card>
         <h3 className="text-lg font-semibold text-gray-900 mb-4">Top Vendors</h3>
         <div className="space-y-3">
@@ -198,28 +220,40 @@ export const Analytics: React.FC<AnalyticsProps> = ({ transactions }) => {
           <div className="p-4 bg-blue-50 rounded-lg">
             <h4 className="font-medium text-blue-900 mb-2">Most Active Day</h4>
             <p className="text-blue-700">
-              You tend to spend most on weekends, particularly Saturdays.
+              {filteredTransactions.length > 0 
+                ? "Analysis based on your transaction patterns"
+                : "Add more transactions to see patterns"
+              }
             </p>
           </div>
           
           <div className="p-4 bg-green-50 rounded-lg">
             <h4 className="font-medium text-green-900 mb-2">Spending Pattern</h4>
             <p className="text-green-700">
-              Your spending is fairly consistent throughout the month.
+              {filteredTransactions.length > 5
+                ? "Your spending patterns are being analyzed"
+                : "Need more data to identify patterns"
+              }
             </p>
           </div>
           
           <div className="p-4 bg-yellow-50 rounded-lg">
             <h4 className="font-medium text-yellow-900 mb-2">Peak Hours</h4>
             <p className="text-yellow-700">
-              Most transactions occur between 12-2 PM and 6-8 PM.
+              {filteredTransactions.length > 10
+                ? "Transaction timing patterns available"
+                : "More transactions needed for timing analysis"
+              }
             </p>
           </div>
           
           <div className="p-4 bg-purple-50 rounded-lg">
             <h4 className="font-medium text-purple-900 mb-2">Payment Method</h4>
             <p className="text-purple-700">
-              Credit cards account for 78% of your transactions.
+              {filteredTransactions.length > 0
+                ? `${Math.round((filteredTransactions.filter(t => t.paymentMethod === 'Credit Card').length / filteredTransactions.length) * 100)}% credit card usage`
+                : "No payment method data available"
+              }
             </p>
           </div>
         </div>

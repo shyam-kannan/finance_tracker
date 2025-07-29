@@ -198,14 +198,19 @@ export const getSpendingPatterns = (transactions: Transaction[]): SpendingPatter
     return [];
   }
   
-  // Get current month transactions
+  // Use all transactions for pattern analysis
   const now = new Date();
   const currentMonth = now.getMonth();
   const currentYear = now.getFullYear();
-  const currentMonthTransactions = transactions.filter(t => {
+  
+  // If we have recent transactions, use current month, otherwise use all
+  const recentTransactions = transactions.filter(t => {
     const date = new Date(t.date);
-    return date.getMonth() === currentMonth && date.getFullYear() === currentYear;
+    const monthsAgo = (now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24 * 30);
+    return monthsAgo <= 1; // Last month
   });
+  
+  const analysisTransactions = recentTransactions.length > 0 ? recentTransactions : transactions;
 
   // Get last month for trend analysis
   const lastMonth = currentMonth === 0 ? 11 : currentMonth - 1;
@@ -215,7 +220,7 @@ export const getSpendingPatterns = (transactions: Transaction[]): SpendingPatter
     return date.getMonth() === lastMonth && date.getFullYear() === lastMonthYear;
   });
 
-  const categorySpending = currentMonthTransactions.reduce((acc, t) => {
+  const categorySpending = analysisTransactions.reduce((acc, t) => {
     acc[t.category] = (acc[t.category] || 0) + t.amount;
     return acc;
   }, {} as Record<string, number>);
