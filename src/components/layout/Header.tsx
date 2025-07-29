@@ -1,6 +1,7 @@
 import React from 'react';
 import { Bell, Search, User } from 'lucide-react';
 import { User as UserType } from '../../types';
+import { useSettings } from '../../hooks/useSettings';
 
 interface HeaderProps {
   user: UserType;
@@ -8,12 +9,25 @@ interface HeaderProps {
 }
 
 export const Header: React.FC<HeaderProps> = ({ user, title }) => {
+  const { settings } = useSettings();
+  
+  const getCurrencySymbol = () => {
+    const symbols = {
+      USD: '$',
+      EUR: '€',
+      GBP: '£',
+      CAD: 'C$',
+      AUD: 'A$'
+    };
+    return symbols[settings.appearance.currency] || '$';
+  };
+
   return (
     <header className="bg-white shadow-sm border-b border-gray-200 px-6 py-4">
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold text-gray-900">{title}</h2>
-          <p className="text-gray-600">Welcome back, {user.name}!</p>
+          <p className="text-gray-600">Welcome back, {settings.profile.name || user.name}!</p>
         </div>
 
         <div className="flex items-center space-x-4">
@@ -34,10 +48,10 @@ export const Header: React.FC<HeaderProps> = ({ user, title }) => {
           </button>
 
           <div className="flex items-center space-x-3">
-            {user.avatar ? (
+            {settings.profile.avatar || user.avatar ? (
               <img
-                src={user.avatar}
-                alt={user.name}
+                src={settings.profile.avatar || user.avatar}
+                alt={settings.profile.name || user.name}
                 className="w-10 h-10 rounded-full object-cover"
               />
             ) : (
@@ -46,8 +60,8 @@ export const Header: React.FC<HeaderProps> = ({ user, title }) => {
               </div>
             )}
             <div className="hidden md:block">
-              <p className="text-sm font-medium text-gray-900">{user.name}</p>
-              <p className="text-xs text-gray-500">{user.email}</p>
+              <p className="text-sm font-medium text-gray-900">{settings.profile.name || user.name}</p>
+              <p className="text-xs text-gray-500">{settings.profile.email || user.email}</p>
             </div>
           </div>
         </div>

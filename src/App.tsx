@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from './hooks/useAuth';
+import { useSettings } from './hooks/useSettings';
 import { AuthForm } from './components/auth/AuthForm';
 import { Sidebar } from './components/layout/Sidebar';
 import { Header } from './components/layout/Header';
@@ -14,6 +15,7 @@ import { mockTransactions, mockBudgets } from './data/mockData';
 
 function App() {
   const { user, loading, login, register, logout } = useAuth();
+  const { settings } = useSettings();
   const [activeTab, setActiveTab] = useState('dashboard');
   const [transactions, setTransactions] = useState<Transaction[]>(mockTransactions);
   const [budgets, setBudgets] = useState<Budget[]>(mockBudgets);
