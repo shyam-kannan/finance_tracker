@@ -14,7 +14,7 @@ Welcome to **FinanceTracker**, a sleek, modern full-stack web app that helps you
 
 ---
 
-## 🖼Screenshots
+## Screenshots
 
 | Dashboard | Transactions | Upload Receipt |
 |----------|--------------|----------------|
@@ -31,6 +31,9 @@ Welcome to **FinanceTracker**, a sleek, modern full-stack web app that helps you
 ---
 
 ## 🚀 Getting Started
+
+### Webapp link to avoid running locally 
+https://financebuddy101.netlify.app/
 
 ### 1. Clone the repo
 
