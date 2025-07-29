@@ -14,10 +14,10 @@ export const Analytics: React.FC<AnalyticsProps> = ({ transactions }) => {
   const [timeFilter, setTimeFilter] = useState('month');
   const [categoryFilter, setCategoryFilter] = useState('all');
 
-  // Get spending patterns based on current transactions
+  // Get spending patterns based on all transactions
   const spendingPatterns = getSpendingPatterns(transactions);
   
-  // Filter transactions based on time period
+  // Filter transactions based on time period - if no recent transactions, show all
   const now = new Date();
   const filteredTransactions = transactions.filter(t => {
     const transactionDate = new Date(t.date);
@@ -64,8 +64,16 @@ export const Analytics: React.FC<AnalyticsProps> = ({ transactions }) => {
     .slice(0, 5);
 
   // Monthly comparison
-  const currentMonth = now.getMonth();
-  const currentYear = now.getFullYear();
+  
+  // Check if we have any recent transactions (within last 2 years)
+  const recentTransactions = transactions.filter(t => {
+    const transactionDate = new Date(t.date);
+    const yearsAgo = (now.getTime() - transactionDate.getTime()) / (1000 * 60 * 60 * 24 * 365);
+    return yearsAgo <= 2;
+  });
+  
+  // If no recent transactions, use all transactions for analysis
+  const useAllTransactions = recentTransactions.length === 0;
   const lastMonth = currentMonth === 0 ? 11 : currentMonth - 1;
   const lastMonthYear = currentMonth === 0 ? currentYear - 1 : currentYear;
   
@@ -74,18 +82,90 @@ export const Analytics: React.FC<AnalyticsProps> = ({ transactions }) => {
       const date = new Date(t.date);
       return date.getMonth() === currentMonth && date.getFullYear() === currentYear;
     })
-    .reduce((sum, t) => sum + t.amount, 0);
+    if (useAllTransactions && timeFilter !== 'all') {
+      // For historical data, group by relative periods
+      const transactionDate = new Date(t.date);
+      const transactionYear = transactionDate.getFullYear();
+      const transactionMonth = transactionDate.getMonth();
+      
+      // Get the most recent year in the data
+      const allYears = transactions.map(tr => new Date(tr.date).getFullYear());
+      const mostRecentYear = Math.max(...allYears);
+      
+      switch (timeFilter) {
+        case 'week':
+        case 'month':
+          // Show transactions from the most recent month in the data
+          const mostRecentMonthTransactions = transactions.filter(tr => {
+            const trDate = new Date(tr.date);
+            return trDate.getFullYear() === mostRecentYear;
+          });
+          if (mostRecentMonthTransactions.length === 0) return true;
+          
+          const mostRecentMonth = Math.max(...mostRecentMonthTransactions.map(tr => new Date(tr.date).getMonth()));
+  // Monthly comparison - adapt for historical data
+  let monthlyChange = 0;
+      }
+  if (useAllTransactions) {
+    // For historical data, compare different periods within the data
+    const allDates = transactions.map(t => new Date(t.date)).sort((a, b) => b.getTime() - a.getTime());
+    if (allDates.length > 1) {
+      const latestDate = allDates[0];
+      const earliestDate = allDates[allDates.length - 1];
+      const latestAmount = transactions.filter(t => new Date(t.date).getTime() === latestDate.getTime())[0]?.amount || 0;
+      const earliestAmount = transactions.filter(t => new Date(t.date).getTime() === earliestDate.getTime())[0]?.amount || 0;
+      
+      if (earliestAmount > 0) {
+        monthlyChange = ((latestAmount - earliestAmount) / earliestAmount) * 100;
+      }
+    }
+  } else {
+    // Standard monthly comparison for recent data
+    const currentMonth = now.getMonth();
+    const currentYear = now.getFullYear();
+    const lastMonth = currentMonth === 0 ? 11 : currentMonth - 1;
+    const lastMonthYear = currentMonth === 0 ? currentYear - 1 : currentYear;
     
-  const lastMonthSpending = transactions
-    .filter(t => {
-      const date = new Date(t.date);
-      return date.getMonth() === lastMonth && date.getFullYear() === lastMonthYear;
-    })
-    .reduce((sum, t) => sum + t.amount, 0);
+    const currentMonthSpending = transactions
+      .filter(t => {
+        const date = new Date(t.date);
+        return date.getMonth() === currentMonth && date.getFullYear() === currentYear;
+      })
+      .reduce((sum, t) => sum + t.amount, 0);
+      
+    const lastMonthSpending = transactions
+      .filter(t => {
+        const date = new Date(t.date);
+        return date.getMonth() === lastMonth && date.getFullYear() === lastMonthYear;
+      })
+      .reduce((sum, t) => sum + t.amount, 0);
+    
+    monthlyChange = lastMonthSpending > 0 
+      ? ((currentMonthSpending - lastMonthSpending) / lastMonthSpending) * 100
+      : 0;
+  }
   
-  const monthlyChange = lastMonthSpending > 0 
-    ? ((currentMonthSpending - lastMonthSpending) / lastMonthSpending) * 100
-    : 0;
+  // Update time filter labels for historical data
+  const getTimeFilterLabel = () => {
+    if (useAllTransactions) {
+      switch (timeFilter) {
+        case 'week':
+        case 'month':
+          return 'Recent Period';
+        case 'year':
+          return 'Most Recent Year';
+        default:
+          return 'All Time';
+      }
+    }
+    
+    switch (timeFilter) {
+      case 'week': return 'This Week';
+      case 'month': return 'This Month';
+      case 'year': return 'This Year';
+      default: return 'All Time';
+    }
+  };
 
   // Show message when no transactions exist
   if (transactions.length === 0) {
@@ -140,6 +220,15 @@ export const Analytics: React.FC<AnalyticsProps> = ({ transactions }) => {
         </div>
       </div>
 
+      {useAllTransactions && (
+        <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+          <p className="text-blue-800 text-sm">
+            📅 Showing historical data from {new Date(Math.min(...transactions.map(t => new Date(t.date).getTime()))).getFullYear()} - {new Date(Math.max(...transactions.map(t => new Date(t.date).getTime()))).getFullYear()}. 
+            Time filters show relative periods within your data.
+          </p>
+        </div>
+      )}
+
       {/* Key Metrics */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <Card>
@@ -149,7 +238,7 @@ export const Analytics: React.FC<AnalyticsProps> = ({ transactions }) => {
               ${totalSpent.toFixed(2)}
             </p>
             <p className={`text-sm mt-2 ${monthlyChange >= 0 ? 'text-red-600' : 'text-green-600'}`}>
-              {monthlyChange >= 0 ? '+' : ''}{monthlyChange.toFixed(1)}% vs last month
+              {monthlyChange >= 0 ? '+' : ''}{monthlyChange.toFixed(1)}% {useAllTransactions ? 'change' : 'vs last month'}
             </p>
           </div>
         </Card>
@@ -160,7 +249,7 @@ export const Analytics: React.FC<AnalyticsProps> = ({ transactions }) => {
             <p className="text-2xl font-bold text-gray-900 mt-1">
               {filteredTransactions.length}
             </p>
-            <p className="text-sm text-gray-500 mt-2">This {timeFilter}</p>
+            <p className="text-sm text-gray-500 mt-2">{getTimeFilterLabel()}</p>
           </div>
         </Card>
         
