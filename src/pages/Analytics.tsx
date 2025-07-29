@@ -14,8 +14,6 @@ export const Analytics: React.FC<AnalyticsProps> = ({ transactions }) => {
   const [timeFilter, setTimeFilter] = useState('month');
   const [categoryFilter, setCategoryFilter] = useState('all');
 
-  const spendingPatterns = getSpendingPatterns(transactions);
-  
   // Filter transactions based on time period
   const now = new Date();
   const filteredTransactions = transactions.filter(t => {
@@ -35,11 +33,14 @@ export const Analytics: React.FC<AnalyticsProps> = ({ transactions }) => {
     }
   });
 
+  // Get spending patterns from filtered transactions
+  const spendingPatterns = getSpendingPatterns(filteredTransactions);
+  
   const totalSpent = filteredTransactions.reduce((sum, t) => sum + t.amount, 0);
   const avgTransaction = filteredTransactions.length > 0 ? totalSpent / filteredTransactions.length : 0;
   
   // Category analysis
-  const categories = [...new Set(transactions.map(t => t.category))];
+  const categories = [...new Set(filteredTransactions.map(t => t.category))];
   const topCategory = spendingPatterns[0];
   
   // Vendor analysis

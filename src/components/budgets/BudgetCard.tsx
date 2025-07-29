@@ -24,7 +24,9 @@ export const BudgetCard: React.FC<BudgetCardProps> = ({ budget, onEdit }) => {
     <Card hover className="cursor-pointer" onClick={() => onEdit(budget)}>
       <div className="flex items-start justify-between mb-4">
         <div>
-          <h3 className="text-lg font-semibold text-gray-900">{budget.category}</h3>
+          <h3 className="text-lg font-semibold text-gray-900">
+            {budget.isOverall ? '🎯 Overall Budget' : budget.category}
+          </h3>
           <p className="text-sm text-gray-500 capitalize">{budget.period} Budget</p>
         </div>
         <div className="p-2 bg-blue-50 rounded-lg">

@@ -21,7 +21,8 @@ export const BudgetForm: React.FC<BudgetFormProps> = ({
     category: '',
     limit: 0,
     period: 'monthly',
-    spent: 0
+    spent: 0,
+    isOverall: false
   });
 
   useEffect(() => {
@@ -32,7 +33,8 @@ export const BudgetForm: React.FC<BudgetFormProps> = ({
         category: '',
         limit: 0,
         period: 'monthly',
-        spent: 0
+        spent: 0,
+        isOverall: false
       });
     }
   }, [budget]);
@@ -47,7 +49,8 @@ export const BudgetForm: React.FC<BudgetFormProps> = ({
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: name === 'limit' ? parseFloat(value) || 0 : value
+      [name]: name === 'limit' ? parseFloat(value) || 0 : 
+               name === 'isOverall' ? value === 'true' : value
     }));
   };
 
@@ -60,24 +63,63 @@ export const BudgetForm: React.FC<BudgetFormProps> = ({
     >
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Category *
+          <label className="block text-sm font-medium text-gray-700 mb-3">
+            Budget Type *
           </label>
-          <select
-            name="category"
-            value={formData.category}
-            onChange={handleInputChange}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            required
-          >
-            <option value="">Select Category</option>
-            {categories.map(category => (
-              <option key={category.id} value={category.name}>
-                {category.name}
-              </option>
-            ))}
-          </select>
+          <div className="space-y-3">
+            <label className="flex items-center">
+              <input
+                type="radio"
+                name="isOverall"
+                value="true"
+                checked={formData.isOverall === true}
+                onChange={handleInputChange}
+                className="mr-2"
+              />
+              <span>Overall Budget (all categories)</span>
+            </label>
+            <label className="flex items-center">
+              <input
+                type="radio"
+                name="isOverall"
+                value="false"
+                checked={formData.isOverall === false}
+                onChange={handleInputChange}
+                className="mr-2"
+              />
+              <span>Category-specific Budget</span>
+            </label>
+          </div>
         </div>
+
+        {!formData.isOverall && (
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Category *
+            </label>
+            <select
+              name="category"
+              value={formData.category}
+              onChange={handleInputChange}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              required={!formData.isOverall}
+            >
+              <option value="">Select Category</option>
+              {categories.map(category => (
+                <option key={category.id} value={category.name}>
+                  {category.name}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
+
+        {formData.isOverall && (
+          <input
+            type="hidden"
+            name="category"
+            value="Overall"
+            onChange={handleInputChange}
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
