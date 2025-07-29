@@ -18,9 +18,9 @@ Whether you’re trying to stay within your monthly food budget or spot sneaky r
 
 ## Screenshots
 
-| Dashboard | Transactions | Upload Receipt |
+| Dashboard | Transactions |
 |----------|--------------|----------------|
-| ![Dashboard](https://i.imgur.com/naryNNP.png) | ![Transactions](https://i.imgur.com/QDE2yXq.png) | ![Upload](./public/screenshots/Screenshot%202025-07-29%20151145.png) |
+| ![Dashboard](https://i.imgur.com/naryNNP.png) | ![Transactions](https://i.imgur.com/QDE2yXq.png) | 
 
 | AI Insights | Budgets | Analytics |
 |-------------|---------|-----------|
