@@ -22,6 +22,28 @@ export const Dashboard: React.FC<DashboardProps> = ({ transactions, budgets }) =
   const overBudgetCategories = budgets.filter(b => b.spent > b.limit);
   const nearBudgetCategories = budgets.filter(b => (b.spent / b.limit) > 0.8 && b.spent <= b.limit);
 
+  // Show welcome message if no data
+  if (transactions.length === 0 && budgets.length === 0) {
+    return (
+      <div className="text-center py-12">
+        <div className="max-w-md mx-auto">
+          <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <span className="text-2xl">📊</span>
+          </div>
+          <h3 className="text-xl font-semibold text-gray-900 mb-2">Welcome to Your Finance Dashboard</h3>
+          <p className="text-gray-600 mb-6">
+            Start by uploading a receipt or adding a transaction manually to see your financial insights.
+          </p>
+          <div className="space-y-2 text-sm text-gray-500">
+            <p>• Upload receipts for automatic AI analysis</p>
+            <p>• Set budgets to track your spending</p>
+            <p>• Get personalized financial insights</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   const stats = [
     {
       title: 'Total Spent',
@@ -92,41 +114,45 @@ export const Dashboard: React.FC<DashboardProps> = ({ transactions, budgets }) =
       </div>
 
       {/* Charts Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <SpendingChart 
-          data={spendingPatterns} 
-          type="pie" 
-          title="Spending by Category" 
-        />
-        <SpendingChart 
-          data={spendingPatterns} 
-          type="bar" 
-          title="Category Breakdown" 
-        />
-      </div>
+      {spendingPatterns.length > 0 && (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <SpendingChart 
+            data={spendingPatterns} 
+            type="pie" 
+            title="Spending by Category" 
+          />
+          <SpendingChart 
+            data={spendingPatterns} 
+            type="bar" 
+            title="Category Breakdown" 
+          />
+        </div>
+      )}
 
       {/* Budget Overview */}
-      <Card>
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Budget Overview</h3>
-        <div className="space-y-4">
-          {budgets.slice(0, 5).map((budget) => (
-            <div key={budget.id}>
-              <div className="flex justify-between items-center mb-2">
-                <span className="font-medium text-gray-900">{budget.category}</span>
-                <span className="text-sm text-gray-600">
-                  ${budget.spent.toFixed(2)} / ${budget.limit.toFixed(2)}
-                </span>
+      {budgets.length > 0 && (
+        <Card>
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">Budget Overview</h3>
+          <div className="space-y-4">
+            {budgets.slice(0, 5).map((budget) => (
+              <div key={budget.id}>
+                <div className="flex justify-between items-center mb-2">
+                  <span className="font-medium text-gray-900">{budget.category}</span>
+                  <span className="text-sm text-gray-600">
+                    ${budget.spent.toFixed(2)} / ${budget.limit.toFixed(2)}
+                  </span>
+                </div>
+                <ProgressBar
+                  value={budget.spent}
+                  max={budget.limit}
+                  color={budget.spent > budget.limit ? 'red' : budget.spent > budget.limit * 0.8 ? 'yellow' : 'green'}
+                  showPercentage={false}
+                />
               </div>
-              <ProgressBar
-                value={budget.spent}
-                max={budget.limit}
-                color={budget.spent > budget.limit ? 'red' : budget.spent > budget.limit * 0.8 ? 'yellow' : 'green'}
-                showPercentage={false}
-              />
-            </div>
-          ))}
-        </div>
-      </Card>
+            ))}
+          </div>
+        </Card>
+      )}
 
       {/* Quick Insights */}
       {(overBudgetCategories.length > 0 || nearBudgetCategories.length > 0) && (

@@ -13,19 +13,30 @@ interface ReceiptUploadProps {
 export const ReceiptUpload: React.FC<ReceiptUploadProps> = ({ onTransactionProcessed }) => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
+  const [processingStatus, setProcessingStatus] = useState<string>('');
+  const [error, setError] = useState<string>('');
 
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
     setUploadedFiles(acceptedFiles);
+    setError('');
     
     for (const file of acceptedFiles) {
       setIsProcessing(true);
+      setProcessingStatus('Analyzing receipt with AI...');
+      
       try {
         const processedTransaction = await processReceipt(file);
         onTransactionProcessed(processedTransaction);
+        setProcessingStatus('Receipt processed successfully!');
       } catch (error) {
         console.error('Error processing receipt:', error);
+        setError(error instanceof Error ? error.message : 'Failed to process receipt');
       } finally {
         setIsProcessing(false);
+        setTimeout(() => {
+          setProcessingStatus('');
+          setError('');
+        }, 3000);
       }
     }
   }, [onTransactionProcessed]);
@@ -73,7 +84,29 @@ export const ReceiptUpload: React.FC<ReceiptUploadProps> = ({ onTransactionProce
           <div className="mt-6 p-4 bg-blue-50 rounded-lg">
             <div className="flex items-center justify-center space-x-2">
               <Loader className="w-5 h-5 text-blue-600 animate-spin" />
-              <span className="text-blue-800 font-medium">Processing receipt with OCR...</span>
+              <span className="text-blue-800 font-medium">{processingStatus}</span>
+            </div>
+          </div>
+        )}
+        
+        {error && (
+          <div className="mt-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+            <div className="flex items-center space-x-2">
+              <div className="w-5 h-5 bg-red-500 rounded-full flex items-center justify-center">
+                <span className="text-white text-xs">!</span>
+              </div>
+              <span className="text-red-800 font-medium">{error}</span>
+            </div>
+          </div>
+        )}
+        
+        {processingStatus && !isProcessing && !error && (
+          <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-lg">
+            <div className="flex items-center space-x-2">
+              <div className="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center">
+                <span className="text-white text-xs">✓</span>
+              </div>
+              <span className="text-green-800 font-medium">{processingStatus}</span>
             </div>
           </div>
         )}
@@ -102,6 +135,16 @@ export const ReceiptUpload: React.FC<ReceiptUploadProps> = ({ onTransactionProce
             </div>
           </div>
         )}
+      </div>
+      
+      <div className="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+        <h4 className="text-sm font-medium text-yellow-900 mb-2">Setup Required</h4>
+        <p className="text-sm text-yellow-800">
+          To use AI-powered receipt analysis, add your OpenAI API key to the environment variables:
+        </p>
+        <code className="block mt-2 p-2 bg-yellow-100 rounded text-xs text-yellow-900">
+          VITE_OPENAI_API_KEY=your_api_key_here
+        </code>
       </div>
     </Card>
   );

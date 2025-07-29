@@ -3,6 +3,10 @@ import { Transaction, Insight, SpendingPattern } from '../types';
 export const generateInsights = (transactions: Transaction[]): Insight[] => {
   const insights: Insight[] = [];
   
+  if (transactions.length === 0) {
+    return insights;
+  }
+  
   // Analyze spending patterns
   const categorySpending = transactions.reduce((acc, t) => {
     acc[t.category] = (acc[t.category] || 0) + t.amount;
@@ -83,6 +87,10 @@ export const generateInsights = (transactions: Transaction[]): Insight[] => {
 };
 
 export const getSpendingPatterns = (transactions: Transaction[]): SpendingPattern[] => {
+  if (transactions.length === 0) {
+    return [];
+  }
+  
   const categorySpending = transactions.reduce((acc, t) => {
     acc[t.category] = (acc[t.category] || 0) + t.amount;
     return acc;
