@@ -39,8 +39,9 @@ export const Analytics: React.FC<AnalyticsProps> = ({ transactions }) => {
   const totalSpent = filteredTransactions.reduce((sum, t) => sum + t.amount, 0);
   const avgTransaction = filteredTransactions.length > 0 ? totalSpent / filteredTransactions.length : 0;
   
-  // Category analysis from actual transactions
-  const topCategory = spendingPatterns[0];
+  // Get spending patterns from filtered transactions
+  const filteredSpendingPatterns = getSpendingPatterns(filteredTransactions);
+  const topCategory = filteredSpendingPatterns[0];
   
   // Vendor analysis
   const vendorSpending = filteredTransactions.reduce((acc, t) => {
@@ -149,7 +150,11 @@ export const Analytics: React.FC<AnalyticsProps> = ({ transactions }) => {
             <p className="text-2xl font-bold text-gray-900 mt-1">
               {filteredTransactions.length}
             </p>
-            <p className="text-sm text-gray-500 mt-2">This {timeFilter}</p>
+            <p className="text-sm text-gray-500 mt-2">
+              {timeFilter === 'week' ? 'This week' : 
+               timeFilter === 'month' ? 'This month' : 
+               timeFilter === 'year' ? 'This year' : 'All time'}
+            </p>
           </div>
         </Card>
         
@@ -181,12 +186,12 @@ export const Analytics: React.FC<AnalyticsProps> = ({ transactions }) => {
       {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <SpendingChart 
-          data={spendingPatterns} 
+          data={filteredSpendingPatterns} 
           type="pie" 
           title="Spending Distribution" 
         />
         <SpendingChart 
-          data={spendingPatterns} 
+          data={filteredSpendingPatterns} 
           type="bar" 
           title="Category Analysis" 
         />
