@@ -14,27 +14,55 @@ export const Analytics: React.FC<AnalyticsProps> = ({ transactions }) => {
   const [timeFilter, setTimeFilter] = useState('month');
   const [categoryFilter, setCategoryFilter] = useState('all');
 
-  // Get spending patterns based on all transactions
-  const spendingPatterns = getSpendingPatterns(transactions);
-  
-  // Filter transactions based on time period - if no recent transactions, show all
+  // Check if we have any recent transactions (within last 2 years)
   const now = new Date();
-  const filteredTransactions = transactions.filter(t => {
+  const recentTransactions = transactions.filter(t => {
     const transactionDate = new Date(t.date);
-    
-    switch (timeFilter) {
-      case 'week':
-        const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-        return transactionDate >= weekAgo;
-      case 'month':
-        return transactionDate.getMonth() === now.getMonth() && 
-               transactionDate.getFullYear() === now.getFullYear();
-      case 'year':
-        return transactionDate.getFullYear() === now.getFullYear();
-      default:
-        return true;
-    }
+    const yearsAgo = (now.getTime() - transactionDate.getTime()) / (1000 * 60 * 60 * 24 * 365);
+    return yearsAgo <= 2;
   });
+  
+  const useAllTransactions = recentTransactions.length === 0;
+  
+  // Filter transactions based on time period
+  let filteredTransactions;
+  
+  if (useAllTransactions) {
+    // For historical data, use different logic
+    const allDates = transactions.map(t => new Date(t.date)).sort((a, b) => b.getTime() - a.getTime());
+    
+    if (timeFilter === 'all') {
+      filteredTransactions = transactions;
+    } else if (timeFilter === 'year') {
+      // Get transactions from the most recent year in the data
+      const latestYear = allDates.length > 0 ? allDates[0].getFullYear() : now.getFullYear();
+      filteredTransactions = transactions.filter(t => new Date(t.date).getFullYear() === latestYear);
+    } else {
+      // For week/month with historical data, show all transactions
+      filteredTransactions = transactions;
+    }
+  } else {
+    // Standard filtering for recent data
+    filteredTransactions = transactions.filter(t => {
+      const transactionDate = new Date(t.date);
+      
+      switch (timeFilter) {
+        case 'week':
+          const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+          return transactionDate >= weekAgo;
+        case 'month':
+          return transactionDate.getMonth() === now.getMonth() && 
+                 transactionDate.getFullYear() === now.getFullYear();
+        case 'year':
+          return transactionDate.getFullYear() === now.getFullYear();
+        default:
+          return true;
+      }
+    });
+  }
+
+  // Get spending patterns based on filtered transactions
+  const spendingPatterns = getSpendingPatterns(filteredTransactions);
 
   const totalSpent = filteredTransactions.reduce((sum, t) => sum + t.amount, 0);
   const avgTransaction = filteredTransactions.length > 0 ? totalSpent / filteredTransactions.length : 0;
@@ -64,16 +92,6 @@ export const Analytics: React.FC<AnalyticsProps> = ({ transactions }) => {
     .slice(0, 5);
 
   // Monthly comparison
-  
-  // Check if we have any recent transactions (within last 2 years)
-  const recentTransactions = transactions.filter(t => {
-    const transactionDate = new Date(t.date);
-    const yearsAgo = (now.getTime() - transactionDate.getTime()) / (1000 * 60 * 60 * 24 * 365);
-    return yearsAgo <= 2;
-  });
-  
-  // If no recent transactions, use all transactions for analysis
-  const useAllTransactions = recentTransactions.length === 0;
   
   // Monthly comparison - adapt for historical data
   let monthlyChange = 0;

@@ -198,34 +198,8 @@ export const getSpendingPatterns = (transactions: Transaction[]): SpendingPatter
     return [];
   }
   
-  // Use all transactions for pattern analysis
-  const now = new Date();
-  const currentMonth = now.getMonth();
-  const currentYear = now.getFullYear();
-  
-  // If we have recent transactions, use current month, otherwise use all
-  const recentTransactions = transactions.filter(t => {
-    const date = new Date(t.date);
-    const monthsAgo = (now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24 * 30);
-    return monthsAgo <= 1; // Last month
-  });
-  
-  const analysisTransactions = recentTransactions.length > 0 ? recentTransactions : transactions;
-
-  // Get last month for trend analysis
-  const lastMonth = currentMonth === 0 ? 11 : currentMonth - 1;
-  const lastMonthYear = currentMonth === 0 ? currentYear - 1 : currentYear;
-  const lastMonthTransactions = transactions.filter(t => {
-    const date = new Date(t.date);
-    return date.getMonth() === lastMonth && date.getFullYear() === lastMonthYear;
-  });
-
-  const categorySpending = analysisTransactions.reduce((acc, t) => {
-    acc[t.category] = (acc[t.category] || 0) + t.amount;
-    return acc;
-  }, {} as Record<string, number>);
-
-  const lastMonthCategorySpending = lastMonthTransactions.reduce((acc, t) => {
+  // Use the provided transactions directly (already filtered by caller)
+  const categorySpending = transactions.reduce((acc, t) => {
     acc[t.category] = (acc[t.category] || 0) + t.amount;
     return acc;
   }, {} as Record<string, number>);
@@ -234,22 +208,11 @@ export const getSpendingPatterns = (transactions: Transaction[]): SpendingPatter
 
   return Object.entries(categorySpending)
     .map(([category, amount]) => {
-      const lastMonthAmount = lastMonthCategorySpending[category] || 0;
-      let trend: 'up' | 'down' | 'stable' = 'stable';
-      
-      if (lastMonthAmount > 0) {
-        const change = ((amount - lastMonthAmount) / lastMonthAmount) * 100;
-        if (change > 10) trend = 'up';
-        else if (change < -10) trend = 'down';
-      } else if (amount > 0) {
-        trend = 'up';
-      }
-
       return {
         category,
         amount,
         percentage: totalSpending > 0 ? (amount / totalSpending) * 100 : 0,
-        trend
+        trend: 'stable' as const // Simplified for now
       };
     })
     .sort((a, b) => b.amount - a.amount);
