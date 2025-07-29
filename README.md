@@ -18,42 +18,45 @@ Whether you’re trying to stay within your monthly food budget or spot sneaky r
 
 ## 🖼️ Screenshots
 
-<table>
-  <tr>
-    <td><strong>Dashboard</strong></td>
-    <td><strong>Transactions</strong></td>
-  </tr>
-  <tr>
-    <td><img src="https://i.imgur.com/naryNNP.png" width="100%"/></td>
-    <td><img src="https://i.imgur.com/QDE2yXq.png" width="100%"/></td>
-  </tr>
-</table>
+### 💼 Main Views
 
-<br/>
+<div style="display: flex; overflow-x: auto; gap: 20px; padding: 10px 0;">
+  <div style="min-width: 500px;">
+    <strong>Dashboard</strong><br/>
+    <img src="https://i.imgur.com/naryNNP.png" width="100%"/>
+  </div>
+  <div style="min-width: 500px;">
+    <strong>Transactions</strong><br/>
+    <img src="https://i.imgur.com/QDE2yXq.png" width="100%"/>
+  </div>
+</div>
 
-<table>
-  <tr>
-    <td><strong>AI Insights</strong></td>
-    <td><strong>Budgets</strong></td>
-    <td><strong>Analytics</strong></td>
-  </tr>
-  <tr>
-    <td><img src="https://i.imgur.com/Kx2BaTs.png" width="100%"/></td>
-    <td><img src="https://i.imgur.com/r2XQS3c.png" width="100%"/></td>
-    <td><img src="https://i.imgur.com/vjYXrRv.png" width="100%"/></td>
-  </tr>
-</table>
+### 📊 Analytics & AI
 
-<br/>
+<div style="display: flex; overflow-x: auto; gap: 20px; padding: 10px 0;">
+  <div style="min-width: 500px;">
+    <strong>AI Insights</strong><br/>
+    <img src="https://i.imgur.com/Kx2BaTs.png" width="100%"/>
+  </div>
+  <div style="min-width: 500px;">
+    <strong>Budgets</strong><br/>
+    <img src="https://i.imgur.com/r2XQS3c.png" width="100%"/>
+  </div>
+  <div style="min-width: 500px;">
+    <strong>Analytics</strong><br/>
+    <img src="https://i.imgur.com/vjYXrRv.png" width="100%"/>
+  </div>
+</div>
 
-<table>
-  <tr>
-    <td><strong>Settings</strong></td>
-  </tr>
-  <tr>
-    <td><img src="https://i.imgur.com/p9MJIA7.png" width="100%"/></td>
-  </tr>
-</table>
+### ⚙️ Settings
+
+<div style="display: flex; overflow-x: auto; gap: 20px; padding: 10px 0;">
+  <div style="min-width: 500px;">
+    <strong>Settings</strong><br/>
+    <img src="https://i.imgur.com/p9MJIA7.png" width="100%"/>
+  </div>
+</div>
+
 
 ## 🚀 Getting Started
 
