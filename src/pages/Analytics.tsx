@@ -77,7 +77,6 @@ export const Analytics: React.FC<AnalyticsProps> = ({ transactions }) => {
   
   // Monthly comparison - adapt for historical data
   let monthlyChange = 0;
-  
   if (useAllTransactions) {
     // For historical data, compare different periods within the data
     const allDates = transactions.map(t => new Date(t.date)).sort((a, b) => b.getTime() - a.getTime());
@@ -192,6 +191,15 @@ export const Analytics: React.FC<AnalyticsProps> = ({ transactions }) => {
         </div>
       </div>
 
+      {useAllTransactions && (
+        <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+          <p className="text-blue-800 text-sm">
+            📅 Showing historical data from {new Date(Math.min(...transactions.map(t => new Date(t.date).getTime()))).getFullYear()} - {new Date(Math.max(...transactions.map(t => new Date(t.date).getTime()))).getFullYear()}. 
+            Time filters show relative periods within your data.
+          </p>
+        </div>
+      )}
+
       {/* Key Metrics */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <Card>
@@ -201,7 +209,7 @@ export const Analytics: React.FC<AnalyticsProps> = ({ transactions }) => {
               ${totalSpent.toFixed(2)}
             </p>
             <p className={`text-sm mt-2 ${monthlyChange >= 0 ? 'text-red-600' : 'text-green-600'}`}>
-              {monthlyChange >= 0 ? '+' : ''}{monthlyChange.toFixed(1)}% vs last month
+              {monthlyChange >= 0 ? '+' : ''}{monthlyChange.toFixed(1)}% {useAllTransactions ? 'change' : 'vs last month'}
             </p>
           </div>
         </Card>
@@ -212,7 +220,7 @@ export const Analytics: React.FC<AnalyticsProps> = ({ transactions }) => {
             <p className="text-2xl font-bold text-gray-900 mt-1">
               {filteredTransactions.length}
             </p>
-            <p className="text-sm text-gray-500 mt-2">This {timeFilter}</p>
+            <p className="text-sm text-gray-500 mt-2">{getTimeFilterLabel()}</p>
           </div>
         </Card>
         
