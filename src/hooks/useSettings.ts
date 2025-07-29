@@ -87,9 +87,23 @@ export const useSettings = () => {
   };
 
   const updateProfile = (profile: Partial<AppSettings['profile']>) => {
-    updateSettings({
+    const updatedSettings = {
       profile: { ...settings.profile, ...profile }
-    });
+    };
+    updateSettings(updatedSettings);
+    
+    // Also update the user object in localStorage to keep them in sync
+    const storedUser = localStorage.getItem('finance_user');
+    if (storedUser) {
+      const user = JSON.parse(storedUser);
+      const updatedUser = {
+        ...user,
+        name: profile.name || user.name,
+        email: profile.email || user.email,
+        avatar: profile.avatar || user.avatar
+      };
+      localStorage.setItem('finance_user', JSON.stringify(updatedUser));
+    }
   };
 
   const updateNotifications = (notifications: Partial<AppSettings['notifications']>) => {

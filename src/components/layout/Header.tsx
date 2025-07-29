@@ -17,6 +17,11 @@ export const Header: React.FC<HeaderProps> = ({ user, title, transactions, budge
   const { settings } = useSettings();
   const { notifications, unreadCount, markAsRead, markAllAsRead, clearNotification } = useNotifications(transactions, budgets);
   
+  // Use settings profile info if available, fallback to user
+  const displayName = settings.profile.name || user.name;
+  const displayEmail = settings.profile.email || user.email;
+  const displayAvatar = settings.profile.avatar || user.avatar;
+  
   const getCurrencySymbol = () => {
     const symbols = {
       USD: '$',
@@ -33,7 +38,7 @@ export const Header: React.FC<HeaderProps> = ({ user, title, transactions, budge
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold text-gray-900">{title}</h2>
-          <p className="text-gray-600">Welcome back, {settings.profile.name || user.name}!</p>
+          <p className="text-gray-600">Welcome back, {displayName}!</p>
         </div>
 
         <div className="flex items-center space-x-4">
@@ -55,10 +60,10 @@ export const Header: React.FC<HeaderProps> = ({ user, title, transactions, budge
           />
 
           <div className="flex items-center space-x-3">
-            {settings.profile.avatar || user.avatar ? (
+            {displayAvatar ? (
               <img
-                src={settings.profile.avatar || user.avatar}
-                alt={settings.profile.name || user.name}
+                src={displayAvatar}
+                alt={displayName}
                 className="w-10 h-10 rounded-full object-cover"
               />
             ) : (
@@ -67,8 +72,8 @@ export const Header: React.FC<HeaderProps> = ({ user, title, transactions, budge
               </div>
             )}
             <div className="hidden md:block">
-              <p className="text-sm font-medium text-gray-900">{settings.profile.name || user.name}</p>
-              <p className="text-xs text-gray-500">{settings.profile.email || user.email}</p>
+              <p className="text-sm font-medium text-gray-900">{displayName}</p>
+              <p className="text-xs text-gray-500">{displayEmail}</p>
             </div>
           </div>
         </div>

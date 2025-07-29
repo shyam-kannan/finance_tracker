@@ -4,12 +4,17 @@ import { User } from '../types';
 export const useAuth = () => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [settings, setSettings] = useState<any>(null);
 
   useEffect(() => {
     // Simulate checking for stored auth
     const storedUser = localStorage.getItem('finance_user');
+    const storedSettings = localStorage.getItem('finance_settings');
     if (storedUser) {
       setUser(JSON.parse(storedUser));
+    }
+    if (storedSettings) {
+      setSettings(JSON.parse(storedSettings));
     }
     setLoading(false);
   }, []);
@@ -17,14 +22,52 @@ export const useAuth = () => {
   const login = async (email: string, password: string) => {
     // Simulate API call
     await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    // Extract name from email (before @)
+    const nameFromEmail = email.split('@')[0].replace(/[._-]/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+    
     const user = {
       id: '1',
       email,
-      name: email.split('@')[0],
+      name: nameFromEmail,
       avatar: `https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&dpr=2`
     };
     setUser(user);
     localStorage.setItem('finance_user', JSON.stringify(user));
+    
+    // Auto-fill settings with user info
+    const defaultSettings = {
+      profile: {
+        name: nameFromEmail,
+        email: email,
+        phone: '',
+        avatar: user.avatar
+      },
+      notifications: {
+        budgetAlerts: true,
+        weeklyReports: true,
+        largeTransactions: false,
+        monthlyInsights: true,
+      },
+      privacy: {
+        dataAnalytics: true,
+        receiptStorage: true,
+      },
+      appearance: {
+        theme: 'light',
+        currency: 'USD',
+        dateFormat: 'MM/DD/YYYY',
+      },
+      apiKeys: {
+        gemini: '',
+      },
+    };
+    
+    // Only set default settings if none exist
+    if (!localStorage.getItem('finance_settings')) {
+      localStorage.setItem('finance_settings', JSON.stringify(defaultSettings));
+    }
+    
     return user;
   };
 
@@ -39,6 +82,37 @@ export const useAuth = () => {
     };
     setUser(user);
     localStorage.setItem('finance_user', JSON.stringify(user));
+    
+    // Auto-fill settings with registration info
+    const defaultSettings = {
+      profile: {
+        name: name,
+        email: email,
+        phone: '',
+        avatar: user.avatar
+      },
+      notifications: {
+        budgetAlerts: true,
+        weeklyReports: true,
+        largeTransactions: false,
+        monthlyInsights: true,
+      },
+      privacy: {
+        dataAnalytics: true,
+        receiptStorage: true,
+      },
+      appearance: {
+        theme: 'light',
+        currency: 'USD',
+        dateFormat: 'MM/DD/YYYY',
+      },
+      apiKeys: {
+        gemini: '',
+      },
+    };
+    
+    localStorage.setItem('finance_settings', JSON.stringify(defaultSettings));
+    
     return user;
   };
 
