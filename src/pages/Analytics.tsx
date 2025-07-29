@@ -39,8 +39,19 @@ export const Analytics: React.FC<AnalyticsProps> = ({ transactions }) => {
   const totalSpent = filteredTransactions.reduce((sum, t) => sum + t.amount, 0);
   const avgTransaction = filteredTransactions.length > 0 ? totalSpent / filteredTransactions.length : 0;
   
-  // Category analysis from actual transactions
-  const topCategory = spendingPatterns[0];
+  // Get top category from filtered transactions
+  const categorySpending = filteredTransactions.reduce((acc, t) => {
+    acc[t.category] = (acc[t.category] || 0) + t.amount;
+    return acc;
+  }, {} as Record<string, number>);
+  
+  const topCategoryEntry = Object.entries(categorySpending)
+    .sort(([, a], [, b]) => b - a)[0];
+  const topCategory = topCategoryEntry ? {
+    category: topCategoryEntry[0],
+    amount: topCategoryEntry[1],
+    percentage: totalSpent > 0 ? (topCategoryEntry[1] / totalSpent) * 100 : 0
+  } : null;
   
   // Vendor analysis
   const vendorSpending = filteredTransactions.reduce((acc, t) => {
@@ -169,7 +180,7 @@ export const Analytics: React.FC<AnalyticsProps> = ({ transactions }) => {
           <div className="text-center">
             <p className="text-sm font-medium text-gray-600">Top Category</p>
             <p className="text-2xl font-bold text-gray-900 mt-1">
-              {topCategory?.category || 'None'}
+              {topCategory ? topCategory.category : 'None'}
             </p>
             <p className="text-sm text-gray-500 mt-2">
               {topCategory ? `${topCategory.percentage.toFixed(1)}% of spending` : 'No data'}
