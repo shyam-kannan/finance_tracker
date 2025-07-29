@@ -73,8 +73,6 @@ Visit http://localhost:3000 to view the app in your browser.
 
 ---
 
----
-
 ## Author
 
 - **Shyam Kannan — Software Developer**
