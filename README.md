@@ -16,9 +16,9 @@ Whether you’re trying to stay within your monthly food budget or spot sneaky r
 
 ---
 
-## 🖼️ Screenshots
+## App Overview
 
-### 💼 Main Views
+### Main Views
 
 <div style="display: flex; overflow-x: auto; gap: 20px; padding: 10px 0;">
   <div style="min-width: 500px;">
@@ -31,7 +31,7 @@ Whether you’re trying to stay within your monthly food budget or spot sneaky r
   </div>
 </div>
 
-### 📊 Analytics & AI
+### Analytics & AI
 
 <div style="display: flex; overflow-x: auto; gap: 20px; padding: 10px 0;">
   <div style="min-width: 500px;">
@@ -48,7 +48,7 @@ Whether you’re trying to stay within your monthly food budget or spot sneaky r
   </div>
 </div>
 
-### ⚙️ Settings
+### Settings
 
 <div style="display: flex; overflow-x: auto; gap: 20px; padding: 10px 0;">
   <div style="min-width: 500px;">
@@ -58,7 +58,7 @@ Whether you’re trying to stay within your monthly food budget or spot sneaky r
 </div>
 
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Webapp link to avoid running locally 
 https://financebuddy101.netlify.app/
