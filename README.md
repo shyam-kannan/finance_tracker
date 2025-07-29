@@ -37,3 +37,9 @@ Welcome to **FinanceTracker**, a sleek, modern full-stack web app that helps you
 ```bash
 git clone https://github.com/yourusername/finance-tracker.git
 cd finance-tracker
+```
+### 2. Install Dependencies
+
+```bash
+npm install
+```
