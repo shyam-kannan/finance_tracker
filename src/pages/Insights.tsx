@@ -3,7 +3,7 @@ import { Brain, TrendingUp, AlertTriangle } from 'lucide-react';
 import { Transaction } from '../types';
 import { Card } from '../components/ui/Card';
 import { InsightCard } from '../components/insights/InsightCard';
-import { generateInsights } from '../services/aiService';
+import { generateInsights, generateSmartRecommendations } from '../services/aiService';
 
 interface InsightsProps {
   transactions: Transaction[];
@@ -11,37 +11,11 @@ interface InsightsProps {
 
 export const Insights: React.FC<InsightsProps> = ({ transactions }) => {
   const insights = generateInsights(transactions);
+  const recommendations = generateSmartRecommendations(transactions);
   
   const highImpactInsights = insights.filter(i => i.impact === 'high');
   const mediumImpactInsights = insights.filter(i => i.impact === 'medium');
   const lowImpactInsights = insights.filter(i => i.impact === 'low');
-
-  const recommendations = [
-    {
-      title: "Optimize Subscription Spending",
-      description: "You have multiple streaming services. Consider consolidating to save $15-30/month.",
-      savings: "$25/month",
-      effort: "Low"
-    },
-    {
-      title: "Meal Planning Strategy",
-      description: "Weekend food spending is 40% higher. Weekly meal prep could reduce costs by 25%.",
-      savings: "$120/month",
-      effort: "Medium"
-    },
-    {
-      title: "Transportation Optimization",
-      description: "Consider carpooling or public transit for daily commutes to reduce fuel costs.",
-      savings: "$80/month",
-      effort: "Medium"
-    },
-    {
-      title: "Bulk Purchase Opportunities",
-      description: "Frequent grocery trips indicate potential for bulk buying savings.",
-      savings: "$45/month",
-      effort: "Low"
-    }
-  ];
 
   return (
     <div className="space-y-6">

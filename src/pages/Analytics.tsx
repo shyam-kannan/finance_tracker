@@ -36,7 +36,7 @@ export const Analytics: React.FC<AnalyticsProps> = ({ transactions }) => {
   });
 
   const totalSpent = filteredTransactions.reduce((sum, t) => sum + t.amount, 0);
-  const avgTransaction = totalSpent / Math.max(filteredTransactions.length, 1);
+  const avgTransaction = filteredTransactions.length > 0 ? totalSpent / filteredTransactions.length : 0;
   
   // Category analysis
   const categories = [...new Set(transactions.map(t => t.category))];
@@ -54,12 +54,22 @@ export const Analytics: React.FC<AnalyticsProps> = ({ transactions }) => {
 
   // Monthly comparison
   const currentMonth = now.getMonth();
+  const currentYear = now.getFullYear();
   const lastMonth = currentMonth === 0 ? 11 : currentMonth - 1;
+  const lastMonthYear = currentMonth === 0 ? currentYear - 1 : currentYear;
+  
   const currentMonthSpending = transactions
-    .filter(t => new Date(t.date).getMonth() === currentMonth)
+    .filter(t => {
+      const date = new Date(t.date);
+      return date.getMonth() === currentMonth && date.getFullYear() === currentYear;
+    })
     .reduce((sum, t) => sum + t.amount, 0);
+    
   const lastMonthSpending = transactions
-    .filter(t => new Date(t.date).getMonth() === lastMonth)
+    .filter(t => {
+      const date = new Date(t.date);
+      return date.getMonth() === lastMonth && date.getFullYear() === lastMonthYear;
+    })
     .reduce((sum, t) => sum + t.amount, 0);
   
   const monthlyChange = lastMonthSpending > 0 

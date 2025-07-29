@@ -14,7 +14,7 @@ interface DashboardProps {
 export const Dashboard: React.FC<DashboardProps> = ({ transactions, budgets }) => {
   const totalSpent = transactions.reduce((sum, t) => sum + t.amount, 0);
   const totalBudget = budgets.reduce((sum, b) => sum + b.limit, 0);
-  const averageTransaction = totalSpent / Math.max(transactions.length, 1);
+  const averageTransaction = transactions.length > 0 ? totalSpent / transactions.length : 0;
   
   const spendingPatterns = getSpendingPatterns(transactions);
   const topSpendingCategory = spendingPatterns[0];
@@ -48,24 +48,24 @@ export const Dashboard: React.FC<DashboardProps> = ({ transactions, budgets }) =
     {
       title: 'Total Spent',
       value: `$${totalSpent.toFixed(2)}`,
-      change: '+12.5%',
-      trend: 'up' as const,
+      change: transactions.length > 0 ? `${transactions.length} transactions` : 'No data',
+      trend: totalSpent > 0 ? 'up' as const : 'stable' as const,
       icon: DollarSign,
       color: 'text-blue-600 bg-blue-50'
     },
     {
       title: 'Budget Remaining',
       value: `$${(totalBudget - totalSpent).toFixed(2)}`,
-      change: '-8.2%',
-      trend: 'down' as const,
+      change: budgets.length > 0 ? `${budgets.length} budgets` : 'No budgets',
+      trend: totalBudget > totalSpent ? 'up' as const : 'down' as const,
       icon: Target,
       color: 'text-green-600 bg-green-50'
     },
     {
       title: 'Avg Transaction',
       value: `$${averageTransaction.toFixed(2)}`,
-      change: '+4.1%',
-      trend: 'up' as const,
+      change: transactions.length > 0 ? 'Per transaction' : 'No data',
+      trend: 'stable' as const,
       icon: TrendingUp,
       color: 'text-purple-600 bg-purple-50'
     },
