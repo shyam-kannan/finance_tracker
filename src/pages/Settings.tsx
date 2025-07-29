@@ -331,19 +331,6 @@ export const Settings: React.FC = () => {
         </div>
       </Card>
 
-      <Card>
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Security</h3>
-        <div className="space-y-4">
-          <Button variant="outline" className="w-full">
-            <Shield className="w-4 h-4 mr-2" />
-            Change Password
-          </Button>
-          <Button variant="outline" className="w-full">
-            <RefreshCw className="w-4 h-4 mr-2" />
-            Enable Two-Factor Authentication
-          </Button>
-        </div>
-      </Card>
     </div>
   );
 

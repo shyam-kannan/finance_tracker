@@ -136,19 +136,6 @@ export const ReceiptUpload: React.FC<ReceiptUploadProps> = ({ onTransactionProce
           </div>
         )}
       </div>
-      
-      <div className="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-        <h4 className="text-sm font-medium text-yellow-900 mb-2">Setup Required</h4>
-        <p className="text-sm text-yellow-800">
-          To use AI-powered receipt analysis, add your Google Gemini API key to the environment variables:
-        </p>
-        <code className="block mt-2 p-2 bg-yellow-100 rounded text-xs text-yellow-900">
-          VITE_GEMINI_API_KEY=your_api_key_here
-        </code>
-        <p className="text-sm text-yellow-800 mt-2">
-          Get your free API key at: <a href="https://makersuite.google.com/app/apikey" target="_blank" rel="noopener noreferrer" className="underline">Google AI Studio</a>
-        </p>
-      </div>
     </Card>
   );
 };
