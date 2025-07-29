@@ -20,7 +20,7 @@ export const analyzeReceiptWithLLM = async (imageFile: File): Promise<ReceiptAna
     const base64Image = await fileToBase64(imageFile);
     
     const response = await openai.chat.completions.create({
-      model: "gpt-4-vision-preview",
+      model: "gpt-4o",
       messages: [
         {
           role: "user",
