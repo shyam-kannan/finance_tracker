@@ -1,4 +1,4 @@
-# 🧾 FinanceTracker – AI-Powered Receipt Intelligence App
+# FinanceTracker – AI-Powered Receipt Intelligence App
 
 FinanceTracker is an AI-powered personal finance web app that transforms how you manage expenses. Simply upload a receipt image or PDF — and the app will automatically detect whether it's a valid purchase receipt, extract all essential information (vendor, total, date, payment method), categorize your spending, and offer personalized insights using a powerful language model.
 
