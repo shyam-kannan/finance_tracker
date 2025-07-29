@@ -58,6 +58,10 @@ function App() {
         if (budget.isOverall) {
           // Update overall budget: subtract old amount, add new amount
           const newSpent = budget.spent - oldTransaction.amount + updatedTransaction.amount;
+        }
+      }
+      )
+      )
       setBudgets(prev => prev.map(budget => {
         if (budget.isOverall) {
           // Subtract from overall budget
