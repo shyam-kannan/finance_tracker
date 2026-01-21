@@ -3,26 +3,36 @@ import { Eye, EyeOff, Mail, Lock, User } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { Card } from '../ui/Card';
 
+// Props interface for the authentication form component
 interface AuthFormProps {
   onLogin: (email: string, password: string) => Promise<void>;
   onRegister: (email: string, password: string, name: string) => Promise<void>;
 }
 
+// Authentication form component that handles both login and registration
+// @param onLogin - Function to handle user login authentication
+// @param onRegister - Function to handle user registration
 export const AuthForm: React.FC<AuthFormProps> = ({ onLogin, onRegister }) => {
+  // Toggle between login and registration modes
   const [isLogin, setIsLogin] = useState(true);
+  // Loading state for async operations
   const [isLoading, setIsLoading] = useState(false);
+  // Toggle password visibility
   const [showPassword, setShowPassword] = useState(false);
+  // Form data state containing user input
   const [formData, setFormData] = useState({
     email: '',
     password: '',
     name: ''
   });
 
+  // Handle form submission for both login and registration
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
     try {
+      // Call appropriate auth function based on current mode
       if (isLogin) {
         await onLogin(formData.email, formData.password);
       } else {
@@ -35,6 +45,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({ onLogin, onRegister }) => {
     }
   };
 
+  // Handle input field changes and update form state
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData(prev => ({
       ...prev,
@@ -46,9 +57,11 @@ export const AuthForm: React.FC<AuthFormProps> = ({ onLogin, onRegister }) => {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
       <Card className="w-full max-w-md" padding="lg">
         <div className="text-center mb-8">
+          {/* App logo/icon */}
           <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
             <span className="text-2xl font-bold text-white">F</span>
           </div>
+          {/* Dynamic title based on form mode */}
           <h1 className="text-2xl font-bold text-gray-900 mb-2">
             {isLogin ? 'Welcome Back' : 'Create Account'}
           </h1>
@@ -58,6 +71,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({ onLogin, onRegister }) => {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Name field - only shown during registration */}
           {!isLogin && (
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -112,6 +126,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({ onLogin, onRegister }) => {
                 required
                 minLength={6}
               />
+              {/* Toggle password visibility button */}
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
@@ -132,6 +147,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({ onLogin, onRegister }) => {
           </Button>
         </form>
 
+        {/* Toggle between login and registration modes */}
         <div className="mt-6 text-center">
           <p className="text-gray-600">
             {isLogin ? "Don't have an account? " : "Already have an account? "}
