@@ -9,16 +9,33 @@ interface SpendingChartProps {
   title: string;
 }
 
+// Color palette for chart elements - cycles through when there are more categories than colors
 const COLORS = [
   '#3B82F6', '#EF4444', '#10B981', '#F59E0B', 
   '#8B5CF6', '#EC4899', '#6B7280', '#14B8A6'
 ];
 
+/**
+ * SpendingChart component that renders spending data as either a pie chart or bar chart
+ * @param data - Array of spending patterns containing category and amount data
+ * @param type - Chart type, either 'pie' or 'bar'
+ * @param title - Title to display above the chart
+ * @returns JSX element containing the rendered chart
+ */
 export const SpendingChart: React.FC<SpendingChartProps> = ({ data, type, title }) => {
+  /**
+   * Custom label renderer for pie chart slices
+   * @param cx, cy - Center coordinates of the pie chart
+   * @param midAngle - Middle angle of the pie slice
+   * @param innerRadius, outerRadius - Inner and outer radius of the pie slice
+   * @param percent - Percentage value of the slice
+   * @returns JSX element for the label or null if slice is too small
+   */
   const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent }: any) => {
     if (percent < 0.05) return null; // Don't show labels for slices smaller than 5%
     
     const RADIAN = Math.PI / 180;
+    // Calculate label position at the middle of the slice
     const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
     const x = cx + radius * Math.cos(-midAngle * RADIAN);
     const y = cy + radius * Math.sin(-midAngle * RADIAN);
@@ -54,6 +71,7 @@ export const SpendingChart: React.FC<SpendingChartProps> = ({ data, type, title 
                 fill="#8884d8"
                 dataKey="amount"
               >
+                {/* Apply colors to each pie slice */}
                 {data.map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                 ))}
@@ -68,9 +86,9 @@ export const SpendingChart: React.FC<SpendingChartProps> = ({ data, type, title 
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis 
                 dataKey="category" 
-                angle={-45}
+                angle={-45} // Rotate labels to prevent overlap
                 textAnchor="end"
-                interval={0}
+                interval={0} // Show all category labels
                 height={80}
               />
               <YAxis tickFormatter={(value) => `$${value}`} />
@@ -84,6 +102,7 @@ export const SpendingChart: React.FC<SpendingChartProps> = ({ data, type, title 
         </ResponsiveContainer>
       </div>
       
+      {/* Legend for pie chart showing category names with corresponding colors */}
       {type === 'pie' && (
         <div className="mt-4 grid grid-cols-2 gap-2">
           {data.map((entry, index) => (

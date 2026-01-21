@@ -13,8 +13,17 @@ interface HeaderProps {
   budgets: Budget[];
 }
 
+/**
+ * Header component that displays the main navigation bar
+ * @param user - User object containing basic user information
+ * @param title - Page title to display in the header
+ * @param transactions - Array of transactions for notification processing
+ * @param budgets - Array of budgets for notification processing
+ * @returns JSX element representing the application header
+ */
 export const Header: React.FC<HeaderProps> = ({ user, title, transactions, budgets }) => {
   const { settings } = useSettings();
+  // Get notifications data and handlers from custom hook
   const { notifications, unreadCount, markAsRead, markAllAsRead, clearNotification } = useNotifications(transactions, budgets);
   
   // Use settings profile info if available, fallback to user
@@ -22,6 +31,10 @@ export const Header: React.FC<HeaderProps> = ({ user, title, transactions, budge
   const displayEmail = settings.profile.email || user.email;
   const displayAvatar = settings.profile.avatar || user.avatar;
   
+  /**
+   * Returns the appropriate currency symbol based on user settings
+   * @returns Currency symbol string
+   */
   const getCurrencySymbol = () => {
     const symbols = {
       USD: '$',
@@ -36,12 +49,15 @@ export const Header: React.FC<HeaderProps> = ({ user, title, transactions, budge
   return (
     <header className="bg-white shadow-sm border-b border-gray-200 px-6 py-4">
       <div className="flex items-center justify-between">
+        {/* Left side: Page title and welcome message */}
         <div>
           <h2 className="text-2xl font-bold text-gray-900">{title}</h2>
           <p className="text-gray-600">Welcome back, {displayName}!</p>
         </div>
 
+        {/* Right side: Search, notifications, and user profile */}
         <div className="flex items-center space-x-4">
+          {/* Search input with icon */}
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
             <input
@@ -51,6 +67,7 @@ export const Header: React.FC<HeaderProps> = ({ user, title, transactions, budge
             />
           </div>
 
+          {/* Notification dropdown component */}
           <NotificationDropdown
             notifications={notifications}
             unreadCount={unreadCount}
@@ -59,7 +76,9 @@ export const Header: React.FC<HeaderProps> = ({ user, title, transactions, budge
             onClearNotification={clearNotification}
           />
 
+          {/* User profile section with avatar and info */}
           <div className="flex items-center space-x-3">
+            {/* Display custom avatar or default user icon */}
             {displayAvatar ? (
               <img
                 src={displayAvatar}
@@ -71,6 +90,7 @@ export const Header: React.FC<HeaderProps> = ({ user, title, transactions, budge
                 <User className="w-6 h-6 text-white" />
               </div>
             )}
+            {/* User name and email - hidden on mobile */}
             <div className="hidden md:block">
               <p className="text-sm font-medium text-gray-900">{displayName}</p>
               <p className="text-xs text-gray-500">{displayEmail}</p>

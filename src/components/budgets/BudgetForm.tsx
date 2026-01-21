@@ -11,12 +11,20 @@ interface BudgetFormProps {
   budget?: Budget | null;
 }
 
+/**
+ * BudgetForm component for creating and editing budget entries
+ * @param isOpen - Controls whether the modal is visible
+ * @param onClose - Callback function to close the modal
+ * @param onSubmit - Callback function to handle form submission with budget data
+ * @param budget - Optional existing budget data for editing (null/undefined for creating new)
+ */
 export const BudgetForm: React.FC<BudgetFormProps> = ({
   isOpen,
   onClose,
   onSubmit,
   budget
 }) => {
+  // Initialize form state with default budget structure
   const [formData, setFormData] = useState<Partial<Budget>>({
     category: '',
     limit: 0,
@@ -24,6 +32,7 @@ export const BudgetForm: React.FC<BudgetFormProps> = ({
     spent: 0
   });
 
+  // Populate form with existing budget data when editing, or reset to defaults when creating new
   useEffect(() => {
     if (budget) {
       setFormData(budget);
@@ -37,16 +46,25 @@ export const BudgetForm: React.FC<BudgetFormProps> = ({
     }
   }, [budget]);
 
+  /**
+   * Handle form submission
+   * @param e - Form event to prevent default browser submission
+   */
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSubmit(formData);
     onClose();
   };
 
+  /**
+   * Handle input field changes and update form state
+   * @param e - Change event from input or select elements
+   */
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
+      // Parse limit field as float, all other fields as strings
       [name]: name === 'limit' ? parseFloat(value) || 0 : value
     }));
   };
@@ -72,6 +90,7 @@ export const BudgetForm: React.FC<BudgetFormProps> = ({
           >
             <option value="">Select Category</option>
             <option value="Overall Budget">Overall Budget (All Categories)</option>
+            {/* Dynamically populate category options from mock data */}
             {categories.map(category => (
               <option key={category.id} value={category.name}>
                 {category.name}
@@ -114,6 +133,7 @@ export const BudgetForm: React.FC<BudgetFormProps> = ({
           </div>
         </div>
 
+        {/* Informational tips section for user guidance */}
         <div className="bg-blue-50 p-4 rounded-lg">
           <h4 className="text-sm font-medium text-blue-900 mb-2">Budget Tips</h4>
           <ul className="text-sm text-blue-700 space-y-1">
